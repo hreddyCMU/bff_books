@@ -85,7 +85,7 @@ const isValidJWTandUserAgent = (req,res) => {
 //=================================API end point for adding a book to books table===========================
 app.post("/books",(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.post('http://localhost:3000/books', req.body)
+        axios.post('http://35.172.143.215:3000/books', req.body)
           .then(function (response) {
             res.status(response.data.statusCode).json({
                 ...response.data
@@ -102,7 +102,7 @@ app.post("/books",(req,res) =>{
 //=================================API end point for updating a book to books table===========================
 app.put('/books/:isbn',(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.put(`http://localhost:3000/books/${req.params.isbn}`, req.body)
+        axios.put(`http://35.172.143.215:3000/books/${req.params.isbn}`, req.body)
           .then(function (response) {
             res.status(response.data.statusCode).json({
                 ...response.data
@@ -119,7 +119,7 @@ app.put('/books/:isbn',(req,res) =>{
 //=================================API end point for retrieving a book from books table===========================
 app.get('/books/isbn/:isbn',(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.put(`http://localhost:3000/books/isbn/${req.params.isbn}`, req.body)
+        axios.put(`http://35.172.143.215:3000/books/isbn/${req.params.isbn}`, req.body)
           .then(function (response) {
             if(isUserAgentMobile && response.data.genre === "non-fiction"){
                 res.status(response.data.statusCode).json({
@@ -149,7 +149,7 @@ app.get('/books/isbn/:isbn',(req,res) =>{
 
 app.get('/books/:isbn',(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.put(`http://localhost:3000/books/${req.params.isbn}`, req.body)
+        axios.put(`http://35.172.143.215:3000/books/${req.params.isbn}`, req.body)
           .then(function (response) {
             if(isUserAgentMobile && response.data.genre === "non-fiction"){
                 res.status(response.data.statusCode).json({
