@@ -219,6 +219,7 @@ app.put('/books/:isbn',(req,res) =>{
 
 //=================================API end point for retrieving a book from books table===========================
 app.get('/books/isbn/:isbn',(req,res) =>{
+    console.log("ISBN",req.params.isbn);
     let sql = `SELECT * FROM books WHERE isbn = '${req.params.isbn}'`;
     let query = db.query(sql, (err,result) => {
         if(err) {
@@ -254,13 +255,28 @@ app.get('/books/isbn/:isbn',(req,res) =>{
 //=================================API end point for retrieving a book from books table===========================
 
 app.get('/books/:isbn',(req,res) =>{
+    console.log("from get req port 3000");
     let sql = `SELECT * FROM books WHERE isbn = '${req.params.isbn}'`;
     let query = db.query(sql, (err,result) => {
-        if(err) throw err;
+        console.log("result",result);
+        if(err) {
+            res.status(500).json({
+                statusCode: 500,
+                message : "Server error"
+            });
+        }
         else{
+            //Check for presence of the entry with given ISBN number
             if(result.length == 0){
-                //Check for presence of the entry with given ISBN number
+                console.log("return from len 0");
                 res.status(404).json({
+                    statusCode: 404,
+                    message : "ISBN not found"
+                });
+            }
+            else{
+                //Return response for successful retrieval
+                res.status(200).json({
                                 "ISBN": result[0].isbn,
                                 "title": result[0].title,
                                 "Author": result[0].author,
@@ -268,13 +284,6 @@ app.get('/books/:isbn',(req,res) =>{
                                 "genre": result[0].genre,
                                 "price": result[0].price,
                                 "quantity": result[0].quantity
-                });
-            }
-            else{
-                //Return response for successful retrieval
-                res.status(200).json({
-                    statusCode: 200,
-                    message : result[0]
                 });
             }
         }
