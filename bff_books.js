@@ -85,14 +85,19 @@ const isValidJWTandUserAgent = (req,res) => {
 //=================================API end point for adding a book to books table===========================
 app.post("/books",(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.post('http://35.172.143.215:3000/books', req.body)
+        axios.post('http://localhost:3000/books', req.body)
           .then(function (response) {
-            res.status(response.data.statusCode).json({
+            res.status(response.status).json({
                 ...response.data
             });
           })
           .catch(function (error) {
-            console.log(error);
+            //   console.log(error);
+            if(error){
+                res.status(error.response.status).json({
+                    ...error.response.data
+                });
+             }
           });
         
     }
@@ -102,14 +107,18 @@ app.post("/books",(req,res) =>{
 //=================================API end point for updating a book to books table===========================
 app.put('/books/:isbn',(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.put(`http://35.172.143.215:3000/books/${req.params.isbn}`, req.body)
+        axios.put(`http://localhost:3000/books/${req.params.isbn}`, req.body)
           .then(function (response) {
-            res.status(response.data.statusCode).json({
+            res.status(response.status).json({
                 ...response.data
             });
           })
           .catch(function (error) {
-            console.log(error);
+            if(error){
+                res.status(error.response.status).json({
+                    ...error.response.data
+                });
+             }
           });
         
     }
@@ -119,10 +128,10 @@ app.put('/books/:isbn',(req,res) =>{
 //=================================API end point for retrieving a book from books table===========================
 app.get('/books/isbn/:isbn',(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.put(`http://35.172.143.215:3000/books/isbn/${req.params.isbn}`, req.body)
+        axios.get(`http://localhost:3000/books/isbn/${req.params.isbn}`, req.body)
           .then(function (response) {
-            if(isUserAgentMobile && response.data.genre === "non-fiction"){
-                res.status(response.data.statusCode).json({
+            if(isUserAgentMobile && response.status == 200 && response.data.genre === "non-fiction"){
+                res.status(response.status).json({
                     "ISBN": response.data.ISBN,
                     "title": response.data.title,
                     "Author": response.data.Author,
@@ -133,13 +142,17 @@ app.get('/books/isbn/:isbn',(req,res) =>{
                 });
             }
             else{
-                res.status(response.data.statusCode).json({
+                res.status(response.status).json({
                     ...response.data
                 });
             }
           })
           .catch(function (error) {
-            console.log(error);
+            if(error){
+                res.status(error.response.status).json({
+                    ...error.response.data
+                });
+             }
           });
         
     }
@@ -149,10 +162,11 @@ app.get('/books/isbn/:isbn',(req,res) =>{
 
 app.get('/books/:isbn',(req,res) =>{
     if(isValidJWTandUserAgent(req,res)){
-        axios.put(`http://35.172.143.215:3000/books/${req.params.isbn}`, req.body)
+        axios.get(`http://localhost:3000/books/${req.params.isbn}`, req.body)
           .then(function (response) {
-            if(isUserAgentMobile && response.data.genre === "non-fiction"){
-                res.status(response.data.statusCode).json({
+              console.log(response);
+            if(isUserAgentMobile && response.status === 200 &&  response.data.genre === "non-fiction"){
+                res.status(response.status).json({
                     "ISBN": response.data.ISBN,
                     "title": response.data.title,
                     "Author": response.data.Author,
@@ -163,13 +177,17 @@ app.get('/books/:isbn',(req,res) =>{
                 });
             }
             else{
-                res.status(response.data.statusCode).json({
+                res.status(response.status).json({
                     ...response.data
                 });
             }
           })
           .catch(function (error) {
-            console.log(error);
+             if(error){
+                res.status(error.response.status).json({
+                    ...error.response.data
+                });
+             }
           });
         
     }
